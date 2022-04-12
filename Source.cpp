@@ -13,8 +13,8 @@ using namespace std;
 
 std::vector<glm::vec3> s_vertices = {};
 std::vector<glm::vec3> s_colors = {};
-glm::vec2 point1 = glm::vec2(-1.0f, 0.75f);
-glm::vec2 point2 = glm::vec2(0.25f, -1.0f);
+glm::vec2 point1 = glm::vec2(-0.75f, 0.75f);
+glm::vec2 point2 = glm::vec2(0.25f, -0.75f);
 
 #define		numVBOs			2
 #define		numVAOs			1
@@ -143,17 +143,16 @@ GLuint createShaderProgram() {
 
 
 void generateCirclePoints(glm::vec2 start_point, GLfloat rad, GLint num_segment) {
-	GLfloat x, y;
+	float x, y;
 	GLfloat alpha = 0.0f;
-	GLfloat full_circle = 2.0f * M_PI;
 
 	s_vertices.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
 	s_colors.push_back(glm::vec3(0.0f, 1.0f, 0.0f));
 
 	for (int i = 0; i <= num_segment; i++) {
 		float theta = 2.0f * M_PI * alpha;
-		float x = start_point.x + rad * cosf(theta);
-		float y = start_point.y + rad * sinf(theta);
+		x = start_point.x + rad * cosf(theta);
+		y = start_point.y + rad * sinf(theta);
 		s_vertices.push_back(glm::vec3(x, y, 0.0f));
 		s_colors.push_back(glm::vec3(1.0f, 0.0f, 0.0f));
 		alpha += 1.0f / num_segment;
@@ -254,14 +253,20 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 	else if (action == GLFW_RELEASE)
 		keyboard[key] = GL_FALSE;
 
-	if (key == GLFW_KEY_V && action == GLFW_PRESS) {
-		float original = y;
-		if (incrementY < 0) y += 0.2f;
-		if (incrementY > 0) y -= 0.2f;
-		if (detectCollision(0, y)) y = original;
+	if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
+		if (incrementX >= 0) incrementX *= -1;
+	}
 
-		//y += 0.1f;
-		//if (detectCollision(0, y)) y = original;
+	if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
+		if (incrementX < 0) incrementX *= -1;
+	}
+
+	if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
+		if (incrementY >= 0) incrementY *= -1;
+	}
+
+	if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
+		if (incrementY < 0) incrementY *= -1;
 	}
 
 }
